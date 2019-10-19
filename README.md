@@ -16,4 +16,5 @@ Language: Python v3.8.0
 Framework: Flask
 
 Dependencies:
-SQLAlchemy
+SQLAlchemy--sql
+Flask-migrate
