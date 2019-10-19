@@ -8,7 +8,8 @@ pic here
 ### Initial Setup
 
 ### Running Locally
-
+create the migration repository for microblog by running ```flask db init```
+migrate the db by running ```flask db migrate```
 ### Run Tests
 
 ### Tech Stack
