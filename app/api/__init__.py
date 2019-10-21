@@ -2,6 +2,7 @@ from flask import Blueprint
 
 def create_app(config_class=Config):
     app = Flask(__name__)
+    app.debug = True
 
     bp = Blueprint('api', __name__)
 
