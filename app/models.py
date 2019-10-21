@@ -15,6 +15,25 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.first_name)
 
+    def to_dict(self, include_email=False):
+        data = {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'phone_number': self.phone_number
+        }
+        if include_email:
+            data['email'] = self.email
+        return data
+
+    def from_dict(self, data, new_user=False):
+        for field in ['first_name', 'last_name', 'email']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
+
 class Opportunity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
