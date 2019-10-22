@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, jsonify, request
 from app import app
 from app import db
-from api.api.errors import bad_request
+from app.api.errors import bad_request
 from app.forms import LoginForm
 from app.models import User
 
@@ -39,7 +39,8 @@ def get_user(id):
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
-    if 'first_name' not in data or 'last_name' not in data or 'email' not in data or 'password' not in data or 'phone_number' not in data:
+    # import ipdb; ipdb.set_trace()
+    if 'first_name' not in data or 'last_name' not in data or 'email' not in data or 'password_hash' not in data or 'phone_number' not in data:
         return bad_request('Error: Missing fields')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('That email is in use, please pick another.')
