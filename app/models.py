@@ -1,7 +1,9 @@
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(120), index=True)
     last_name = db.Column(db.String(120), index=True)
@@ -12,16 +14,19 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     opportunities = db.relationship('Opportunity', backref='client', lazy='dynamic')
 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+        
     def __repr__(self):
         return '<User {}>'.format(self.first_name)
 
     def to_dict(self, include_email=False):
         data = {
-            'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'phone_number': self.phone_number
+        'id': self.id,
+        'first_name': self.first_name,
+        'last_name': self.last_name,
+        'email': self.email,
+        'phone_number': self.phone_number
         }
         if include_email:
             data['email'] = self.email
@@ -31,8 +36,8 @@ class User(db.Model):
         for field in ['first_name', 'last_name', 'email']:
             if field in data:
                 setattr(self, field, data[field])
-        if new_user and 'password' in data:
-            self.set_password(data['password'])
+        if new_user and 'password_hash' in data:
+            self.set_password(data['password_hash'])
 
 class Opportunity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
